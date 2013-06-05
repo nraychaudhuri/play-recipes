@@ -1,0 +1,17 @@
+@(speakers: List[models.Speaker])
+
+@main("Welcome to Play 2.1") {
+<div>
+    @for(speaker <- speakers) {
+        <p>
+            <label>@speaker.name</label>
+            <ul>
+              @for(talk <- speaker.talks) {
+                 <li>@talk.description</li>
+              }
+            </ul>
+        </>
+    }
+</div>
+
+}
