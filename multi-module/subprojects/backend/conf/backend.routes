@@ -1,0 +1,4 @@
+GET     /                           controllers.backend.Admin.index
+
+->      /common/assets              commonassets.Routes
+

@@ -1,0 +1,18 @@
+Multi module Play project
+=====================================
+
+Sample project that shows how a large play application can be broken down to multiple sub-projects.
+
+* backend
+* frontend
+* common 
+* common-assets
+
+
+Benefits of this structure
+--------------------------
+
+* Modular structure that allows different teams to work on different parts of the system
+* Better compilation speed
+* Smaller routes files
+
