@@ -6,6 +6,13 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
 
 
+object alltables {  
+  val speakers = new Speakers
+  val talks = new Talks
+}
+
+import alltables._
+
 object SessionTypes extends Enumeration {
   type SessionType = Value
   val LightingTalk, OneHourTalk, Tutorial = Value
@@ -21,10 +28,10 @@ import SessionTypes._
 case class Talk(description: String, sessionType: SessionType, tags: String, speakerId: Long, id: Option[Long] = None)
 
 case class Speaker(name: String, bio: String, twitterId: String, id: Option[Long] = None) {
-  def talks = Talks.findTalks(this)
+  def submittedTalks = talks.findTalks(this)
 }
 
-object Speakers extends Table[Speaker]("SPEAKERS") {
+class Speakers extends Table[Speaker]("SPEAKERS") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def name = column[String]("name", O.NotNull)
   def bio = column[String]("bio", O.NotNull)
@@ -37,7 +44,7 @@ object Speakers extends Table[Speaker]("SPEAKERS") {
 
   def insert(s: Speaker) = {
     DB.withSession { implicit session =>
-      Speakers.autoInc.insert(s)
+      speakers.autoInc.insert(s)
     }
   }
 
@@ -47,20 +54,20 @@ object Speakers extends Table[Speaker]("SPEAKERS") {
 
 
   def findAll: List[Speaker] = DB.withSession {implicit session =>
-    Query(Speakers).list
+    Query(speakers).list
   }
 
 }
 
 
-object Talks extends Table[Talk]("TALKS") {
+class Talks extends Table[Talk]("TALKS") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def description = column[String]("description", O.NotNull)
   def sessionType = column[SessionType]("sessionType", O.NotNull)
   def tags = column[String]("tags", O.NotNull)
   def speakerId = column[Long]("speakerId")
 
-  def speaker = foreignKey("SUP_FK", speakerId, Speakers)(_.id)
+  def speaker = foreignKey("SUP_FK", speakerId, speakers)(_.id)
 
   def * = description ~ sessionType ~ tags ~ speakerId ~ id.? <> (Talk.apply _, Talk.unapply _)
 
@@ -68,7 +75,7 @@ object Talks extends Table[Talk]("TALKS") {
 
   def insert(t: Talk) = {
     DB.withSession { implicit session =>
-      Talks.autoInc.insert(t)
+      talks.autoInc.insert(t)
     }
   }
 
@@ -76,7 +83,7 @@ object Talks extends Table[Talk]("TALKS") {
   def findTalks(s: Speaker): List[Talk] = {
     DB.withSession { implicit session =>
 
-      val q = for(t <- Talks if t.speakerId === s.id.get) yield t
+      val q = for(t <- talks if t.speakerId === s.id.get) yield t
       q.list()
     }
 

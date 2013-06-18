@@ -2,12 +2,12 @@ package controllers
 
 import play.api._
 import play.api.mvc._
-import models.Speakers
+import models.alltables._
 
 object Application extends Controller {
   
   def index = Action {
-    Ok(views.html.index(Speakers.findAll))
+    Ok(views.html.index(speakers.findAll))
   }
   
 }

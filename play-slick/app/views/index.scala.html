@@ -6,7 +6,7 @@
         <p>
             <label>@speaker.name</label>
             <ul>
-              @for(talk <- speaker.talks) {
+              @for(talk <- speaker.submittedTalks) {
                  <li>@talk.description</li>
               }
             </ul>
