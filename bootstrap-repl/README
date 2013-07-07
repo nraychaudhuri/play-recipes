@@ -1,0 +1,6 @@
+Bootstrap play REPL
+=====================================
+
+Using SBT initialCommands it is easy to set initial statements to evaluate when console and console-quick is run. We can use this feature in our benefit to import all the necessary Play packages and create instance of Play application to improve the REPL experience. Take a look at the Build.scala for details.
+
+
